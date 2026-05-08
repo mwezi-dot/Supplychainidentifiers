@@ -64,6 +64,7 @@
   "pnpm": {
     "onlyBuiltDependencies": [
       "@prisma/engines",
+      "@sentry/cli",
       "better-sqlite3",
       "esbuild",
       "prisma",
