@@ -185,46 +185,17 @@ export function Header() {
             </div>
         </header>
         {timeOpen && (
-          <div
-            className="glass-panel"
-            style={{
-              position: "fixed",          // <-- key change
-              top: timePos.top,
-              right: timePos.right - 2,
-              zIndex: 99999,
-              padding: 4,
-              minWidth: 72,
-            }}
-          >
+          <div className="time-dropdown" style={{ top: timePos.top, right: timePos.right - 2 }}>
             {TIME_WINDOWS.map((tw) => (
               <div
                 key={tw}
+                className={`time-option ${tw === timeWindow ? "active" : ""}`}
                 onClick={() => {
                   setTimeWindow(tw);
                   const range = useStore.getState().timeRange;
                   pluginManager.updateTimeRange(range);
                   trackEvent("time-window-change", { window: tw });
                   setTimeOpen(false);
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.color = "#63b3ed";
-                  e.currentTarget.style.boxShadow = "0 0 8px rgba(99,179,237,0.5)";
-                  e.currentTarget.style.border = "1px solid rgba(99,179,237,0.4)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.color = tw === timeWindow ? "#63b3ed" : "var(--text-muted, #94a3b8)";
-                  e.currentTarget.style.boxShadow = "none";
-                  e.currentTarget.style.border = "1px solid transparent";
-                }}
-                style={{
-                  padding: "7px 12px",
-                  cursor: "pointer",
-                  borderRadius: 7,
-                  fontSize: 12,
-                  letterSpacing: "0.05em",
-                  color: tw === timeWindow ? "var(--accent-blue, #63b3ed)" : "var(--text-muted, #94a3b8)",
-                  background: tw === timeWindow ? "rgba(99,179,237,0.12)" : "transparent",
-                  textShadow: tw === timeWindow ? "0 0 8px rgba(99,179,237,0.9)" : "none",
                 }}
               >
                 {tw}

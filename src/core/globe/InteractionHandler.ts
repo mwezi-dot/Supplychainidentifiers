@@ -96,13 +96,11 @@ export function setupInteractionHandlers(
     let hoverTimeout: ReturnType<typeof setTimeout> | null = null;
     let isDragging = false;
 
-    // Track mouse dragging states to avoid expensive picking during camera pan
-    handler.setInputAction(() => { isDragging = true; }, ScreenSpaceEventType.LEFT_DOWN);
-    handler.setInputAction(() => { isDragging = false; }, ScreenSpaceEventType.LEFT_UP);
-    handler.setInputAction(() => { isDragging = true; }, ScreenSpaceEventType.RIGHT_DOWN);
-    handler.setInputAction(() => { isDragging = false; }, ScreenSpaceEventType.RIGHT_UP);
-    handler.setInputAction(() => { isDragging = true; }, ScreenSpaceEventType.MIDDLE_DOWN);
-    handler.setInputAction(() => { isDragging = false; }, ScreenSpaceEventType.MIDDLE_UP);
+    // Track camera movement to avoid expensive picking during camera pan
+    const onMoveStart = () => { isDragging = true; };
+    const onMoveEnd = () => { isDragging = false; };
+    viewer.camera.moveStart.addEventListener(onMoveStart);
+    viewer.camera.moveEnd.addEventListener(onMoveEnd);
 
     // Hover → show tooltip card only
     handler.setInputAction(
@@ -146,6 +144,8 @@ export function setupInteractionHandlers(
 
     return () => {
         if (hoverTimeout) clearTimeout(hoverTimeout);
+        viewer.camera.moveStart.removeEventListener(onMoveStart);
+        viewer.camera.moveEnd.removeEventListener(onMoveEnd);
         handler.destroy();
         canvas.style.cursor = "default";
     };
