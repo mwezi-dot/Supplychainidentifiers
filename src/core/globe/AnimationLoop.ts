@@ -11,6 +11,13 @@ import {
     applyHighlight,
 } from "./animationHelpers";
 
+declare global {
+    interface Window {
+        /** Animation-loop frame counter. Exposed for external plugin throttling. */
+        _wwvFrameCount?: number;
+    }
+}
+
 const R_WGS84_MIN = 6356752.0;
 const R2 = R_WGS84_MIN * R_WGS84_MIN;
 
@@ -128,7 +135,7 @@ export function createUpdateLoop(
 
         const Dh = Math.sqrt(camDistSqr - R2);
         const frame = frameCount++;
-        (window as any)._wwvFrameCount = frame; // Expose globally for throttling
+        window._wwvFrameCount = frame;
         const isStaticCullFrame = frame % STATIC_HORIZON_INTERVAL === 0;
         const selectedId = state.selectedEntity?.id ?? null;
         const hoveredId = hoveredEntityIdRef.current;
