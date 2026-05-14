@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package wwv.anchor.v1;
+
+message AnchorRequest {
+  string event_type = 1;
+  string payload_sha256 = 2;
+  string source_id = 3;
+}
+
+message AnchorResponse {
+  bool accepted = 1;
+  string tx_hash = 2;
+  string chain_id = 3;
+}
+
+message VerifyRequest {
+  string payload_sha256 = 1;
+  string tx_hash = 2;
+}
+
+message VerifyResponse {
+  bool valid = 1;
+  string message = 2;
+}
+
+service AnchorService {
+  rpc AnchorEvents(AnchorRequest) returns (AnchorResponse);
+  rpc VerifyAnchor(VerifyRequest) returns (VerifyResponse);
+}
