@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package wwv.simulation.v1;
+
+message SimulationRequest {
+  string scenario_id = 1;
+  uint32 tick_count = 2;
+  double weather_stress = 3;
+  repeated string impacted_regions = 4;
+}
+
+message RiskCell {
+  int32 x = 1;
+  int32 y = 2;
+  double pole_failure_probability = 3;
+  double supply_delay_hours = 4;
+}
+
+message SimulationTick {
+  uint32 tick = 1;
+  repeated RiskCell cells = 2;
+}
+
+message SimulationResult {
+  string run_id = 1;
+  repeated RiskCell final_cells = 2;
+}
+
+service SimulationService {
+  rpc RunScenario(SimulationRequest) returns (SimulationResult);
+  rpc StreamScenario(SimulationRequest) returns (stream SimulationTick);
+}

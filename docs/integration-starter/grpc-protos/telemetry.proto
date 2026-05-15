@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package wwv.telemetry.v1;
+
+message TelemetryPoint {
+  string device_id = 1;
+  string pole_id = 2;
+  double tilt_x = 3;
+  double tilt_y = 4;
+  double vibration = 5;
+  double temperature_c = 6;
+  double lat = 7;
+  double lon = 8;
+  int64 observed_at_epoch_ms = 9;
+}
+
+message TelemetryBatch {
+  repeated TelemetryPoint points = 1;
+  string source = 2;
+}
+
+message IngestAck {
+  bool accepted = 1;
+  uint32 received_count = 2;
+  string message = 3;
+}
+
+service TelemetryIngestService {
+  rpc PushTelemetryBatch(TelemetryBatch) returns (IngestAck);
+  rpc StreamTelemetry(stream TelemetryPoint) returns (IngestAck);
+}

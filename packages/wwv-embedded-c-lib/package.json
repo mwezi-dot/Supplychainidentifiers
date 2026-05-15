@@ -1,0 +1,7 @@
+{
+  "name": "@worldwideview/wwv-embedded-c-lib",
+  "version": "0.1.0",
+  "private": true,
+  "description": "C template interfaces for embedded sensor fusion and edge services.",
+  "license": "UNLICENSED"
+}
